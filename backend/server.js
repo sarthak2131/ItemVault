@@ -21,10 +21,13 @@ app.use(cors({
     'http://localhost:3000', 
     'http://127.0.0.1:3000', 
     'http://localhost:5000',
+    'https://itemsvault-y9wl.onrender.com',
+    'https://itemvault.onrender.com',
     '*' // More permissive for debugging
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use(express.json());
