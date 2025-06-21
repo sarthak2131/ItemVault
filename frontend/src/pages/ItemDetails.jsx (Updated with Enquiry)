@@ -1,0 +1,86 @@
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import Slider from 'react-slick'
+import { FaEnvelope } from 'react-icons/fa'
+
+function ItemDetails() {
+  const [item, setItem] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const { id } = useParams()
+
+  useEffect(() => {
+    const fetchItem = async () => {
+      try {
+        const response = await axios.get(`/api/items/${id}`)
+        setItem(response.data)
+        setLoading(false)
+      } catch (err) {
+        setError('Failed to fetch item details')
+        setLoading(false)
+      }
+    }
+
+    fetchItem()
+  }, [id])
+
+  const handleEnquire = async () => {
+    try {
+      await axios.post('/api/items/enquire', { itemId: id })
+      alert('Enquiry sent successfully!')
+    } catch (error) {
+      console.error('Enquiry failed:', error)
+      alert('Failed to send enquiry')
+    }
+  }
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  }
+
+  if (loading) return <div className="text-center text-primary">Loading...</div>
+  if (error) return <div className="text-center text-red-500">{error}</div>
+  if (!item) return <div>No item found</div>
+
+  const allImages = [item.coverImage, ...item.additionalImages]
+
+  return (
+    <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="grid md:grid-cols-2 gap-8 p-8">
+        <div>
+          <Slider {...sliderSettings}>
+            {allImages.map((image, index) => (
+              <div key={index} className="h-96">
+                <img 
+                  src={`/uploads/${image}`} 
+                  alt={`Item ${index + 1}`} 
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
+        <div>
+          <h2 className="text-3xl font-bold text-primary mb-4">{item.itemName}</h2>
+          <p className="text-gray-600 mb-4">Type: {item.itemType}</p>
+          <div className="prose max-w-none mb-6">
+            <p>{item.description}</p>
+          </div>
+          <button 
+            onClick={handleEnquire}
+            className="flex items-center bg-secondary text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+          >
+            <FaEnvelope className="mr-2" /> Enquire
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default ItemDetails
