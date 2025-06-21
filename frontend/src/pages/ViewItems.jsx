@@ -202,7 +202,7 @@ function ViewItems() {
                 <Link to={`/item/${item._id}`}>
                   <div className="relative h-48 overflow-hidden">
                     <img 
-                      src={`/uploads/${item.coverImage}`} 
+                      src={item.coverImage} 
                       alt={item.itemName} 
                       className="w-full h-full object-contain hover:scale-110 transition-transform duration-300"
                     />

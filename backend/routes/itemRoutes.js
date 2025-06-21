@@ -4,11 +4,31 @@ import path from 'path';
 import Item from '../models/Item.js';
 import { sendEnquiryEmail } from '../services/emailService.js';
 import { fileURLToPath } from 'url';
+import cloudinary from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router();
+
+// Cloudinary configuration
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Cloudinary storage configuration
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary.v2,
+  params: {
+    folder: 'itemvault',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif']
+  }
+});
+
+const upload = multer({ storage });
 
 // Existing routes...
 
@@ -92,19 +112,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Multer storage configuration for cover and additional images
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads'));
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
-});
-
-const upload = multer({ storage });
-
 // Add new item (with file upload)
 router.post('/', upload.fields([
   { name: 'coverImage', maxCount: 1 },
@@ -118,10 +125,13 @@ router.post('/', upload.fields([
     if (!req.files['coverImage'] || req.files['coverImage'].length === 0) {
       return res.status(400).json({ message: 'Cover image is required' });
     }
-    const coverImage = req.files['coverImage'][0].filename;
+    
+    // Get Cloudinary URLs
+    const coverImage = req.files['coverImage'][0].path;
     const additionalImages = req.files['additionalImages']
-      ? req.files['additionalImages'].map(file => file.filename)
+      ? req.files['additionalImages'].map(file => file.path)
       : [];
+    
     const newItem = new Item({
       itemName,
       itemType,

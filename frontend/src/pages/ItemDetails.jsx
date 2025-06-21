@@ -28,7 +28,7 @@ function ItemDetails() {
       try {
         const response = await axios.get(`${API_URL}/api/items/${id}`)
         setItem(response.data)
-        setSelectedImage(`/uploads/${response.data.coverImage}`)
+        setSelectedImage(response.data.coverImage)
         setLoading(false)
       } catch (err) {
         setError('Failed to fetch item details')
@@ -106,17 +106,17 @@ function ItemDetails() {
             {allImages.map((image, index) => (
               <button 
                 key={index} 
-                onClick={() => setSelectedImage(`/uploads/${image}`)}
+                onClick={() => setSelectedImage(image)}
                 className={`
                   border-2 rounded-lg overflow-hidden 
-                  ${selectedImage === `/uploads/${image}` 
+                  ${selectedImage === image 
                     ? 'border-primary' 
                     : 'border-transparent hover:border-gray-300'
                   }
                 `}
               >
                 <img 
-                  src={`/uploads/${image}`} 
+                  src={image} 
                   alt={`Thumbnail ${index + 1}`} 
                   className="w-full h-20 object-contain"
                 />
