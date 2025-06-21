@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { FaEye, FaTag, FaCalendar } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
+import API_URL from '../config.js'
 
 const ITEM_TYPES = [
   'Shirt', 
@@ -30,7 +31,7 @@ function ViewItems() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get('/api/items')
+        const response = await axios.get(`${API_URL}/api/items`)
         setItems(response.data)
         setLoading(false)
       } catch (err) {

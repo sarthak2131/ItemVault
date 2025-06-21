@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone'
 import { FaCloudUploadAlt, FaTimes } from 'react-icons/fa'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
+import API_URL from '../config.js'
 
 const ITEM_TYPES = [
   'Shirt', 'Pant', 'Shoes', 'Sports Gear', 'Other'
@@ -114,7 +115,7 @@ function AddItem() {
     try {
       // Show loading toast
       const loadingToast = toast.loading('Adding item...')
-      const response = await axios.post('/api/items', formData, {
+      const response = await axios.post(`${API_URL}/api/items`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       // Dismiss loading toast and show success

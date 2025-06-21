@@ -8,6 +8,7 @@ import {
   FaCalendarAlt, 
   FaArrowLeft 
 } from 'react-icons/fa'
+import API_URL from '../config.js'
 
 function ItemDetails() {
   const [item, setItem] = useState(null)
@@ -25,7 +26,7 @@ function ItemDetails() {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const response = await axios.get(`/api/items/${id}`)
+        const response = await axios.get(`${API_URL}/api/items/${id}`)
         setItem(response.data)
         setSelectedImage(`/uploads/${response.data.coverImage}`)
         setLoading(false)
@@ -41,7 +42,7 @@ function ItemDetails() {
   const handleEnquire = async () => {
     setEnquiryStatus({ loading: true, success: false, error: null })
     try {
-      const response = await axios.post('/api/items/enquiry', { 
+      const response = await axios.post(`${API_URL}/api/items/enquiry`, { 
         itemId: id,
         details: item, // Send full item details for email
         email: userEmail // Send user email
