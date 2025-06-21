@@ -9,8 +9,7 @@ const ITEM_TYPES = [
   'Shirt', 
   'Pant', 
   'Shoes', 
-  'Sports Gear', 
-  'Other'
+  'Sports Gear'
 ]
 
 const SORT_OPTIONS = [
