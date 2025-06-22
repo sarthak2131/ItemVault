@@ -15,15 +15,21 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+
+
+
+
+
+
+
+
 // Enhanced CORS configuration
 app.use(cors({
   origin: [
     'http://localhost:3000', 
     'http://127.0.0.1:3000', 
     'http://localhost:5000',
-    'https://itemsvault-y9wl.onrender.com',
-    'https://itemvault.onrender.com',
-    '*' // More permissive for debugging
+    '*' 
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -34,6 +40,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Static file serving for uploads
+
+
+
+
+
+const interval = 30000;
+
+function reloadWebsite() {
+  axios
+    .get(process.env.BACKEND_URL)
+    .then((response) => {
+      console.log("website reloded");
+    })
+    .catch((error) => {
+      console.error(`Error : ${error.message}`);
+    });
+}
+
+setInterval(reloadWebsite, interval);
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
