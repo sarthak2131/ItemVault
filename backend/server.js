@@ -6,6 +6,7 @@ import itemRoutes from './routes/itemRoutes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import axios from 'axios';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -82,6 +83,19 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+const interval = 30000; 
+function reloadWebsite() { 
+  axios 
+    .get(process.env.BACKEND_URL) 
+    .then((response) => { 
+      console.log("website reloded"); 
+    }) 
+    .catch((error) => { 
+      console.error(`Error : ${error.message}`); 
+    }); 
+} 
+setInterval(reloadWebsite, interval);
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
