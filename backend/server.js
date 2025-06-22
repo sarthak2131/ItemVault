@@ -84,18 +84,18 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-const interval = 30000; 
-function reloadWebsite() { 
-  axios 
-    .get(process.env.BACKEND_URL) 
-    .then((response) => { 
-      console.log("website reloded"); 
-    }) 
-    .catch((error) => { 
-      console.error(`Error : ${error.message}`); 
-    }); 
-} 
-setInterval(reloadWebsite, interval);
+// const interval = 30000; 
+// function reloadWebsite() { 
+//   axios 
+//     .get(process.env.BACKEND_URL) 
+//     .then((response) => { 
+//       console.log("website reloded"); 
+//     }) 
+//     .catch((error) => { 
+//       console.error(`Error : ${error.message}`); 
+//     }); 
+// } 
+// setInterval(reloadWebsite, interval);
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
